@@ -1,23 +1,36 @@
-﻿namespace FlightsDomainModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+namespace FlightsDomainModel;
+
+/// <summary>
+/// Describes flight, a plane that flies from A to B at given time
+/// </summary>
 public class Flight {
-    MutableFlight _data;
+    FlightDto _data;
+    public string Id => _data.Id;
+    public DateTime TakeOff => _data.TakeOff;
+    public TimeSpan Duration => _data.Duration;
+    public IAirlane Airline { get; }
+    public Airport From { get; }
+    public Airport Destination { get; }
 
-    public Offer Details => _data.Details!;
-    public Tenant Owner => _data.Owner!;
-    public int FinalPrice => _data.FinalPrice;
-    public IEnumerable<IDiscount> AppliedDisconuts => _data.AppliedDisconuts!;
-
-    private Flight(MutableFlight dto) {
+    private Flight(FlightDto dto, Data context) {
         _data = dto;
+        Airline = context.Airlanes.WithId(dto.AirlineId)!; 
+        From = context.Airports.WithId(dto.SourceAirportId)!;
+        Destination = context.Airports.WithId(dto.DestinationAirportId)!;
     }
-
 }
 
-//used for serialization, would use whatever dto comes from data repository
-internal class MutableFlight {
-    public Offer? Details { get; set; }
-    public Tenant? Owner { get; set; }
-    public int FinalPrice { get; set; }
-    public IEnumerable<IDiscount>? AppliedDisconuts { get; set; }
+public class FlightDto {
+    public string Id { get; set; } = string.Empty;
+    public DateTime TakeOff { get; set; }
+    public TimeSpan Duration { get; set; }
+    public string AirlineId { get; set; } = string.Empty;
+    public int SourceAirportId { get; set; }
+    public int DestinationAirportId { get; set; }
 }

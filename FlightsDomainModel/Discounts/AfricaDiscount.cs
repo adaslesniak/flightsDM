@@ -16,7 +16,7 @@ internal class AfricaDiscount : IDiscount
 
     //TODO: confirm with business that to Africa doesn't mean inter Africa flights
     //TODO: create some proper enumeration or constants for Countries and Continents and Airports probably as well instead of hardcoding strings
-    bool IDiscount.CanBeApplied(Tenant _, Offer flight) =>
+    bool IDiscount.CanBeApplied(Tenant _, Seat flight) =>
         flight.From.Continent != "Africa"
         && flight.Destination.Continent == "Africa";
 }

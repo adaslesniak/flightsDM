@@ -4,5 +4,5 @@ public interface IDiscount {
     Guid Id { get; }
     int ValueInCents { get; }
     string Description { get; }
-    bool CanBeApplied(Tenant tenant, Offer offer);
+    bool CanBeApplied(Tenant tenant, Seat offer);
 }

@@ -1,9 +1,8 @@
 ﻿using System.Reflection;
 namespace FlightsDomainModel;
 
-internal static class NullCheckedFactory
-{
-    internal static bool Create<T, MT>(MT dto, out T? created) {
+internal static class NullCheckedFactory {
+    internal static bool Create<T, MT>(MT dto, Data context, out T? created) {
         created = default;
         if(dto is null) {
             Log.Error("Can't create object from null dto");
@@ -14,7 +13,10 @@ internal static class NullCheckedFactory
             return false;
         }
         try {
-            created = Construct<T, MT>(dto);
+            created = Construct<T, MT>(dto, context);
+            if(ContainsNulls(created)) {
+                throw new ArgumentNullException("Not all data is there, probably context is missing");
+            }
             return true;
         } catch {
             Console.WriteLine($"Wrong use of {nameof(NullCheckedFactory)}, {typeof(T)} doesn't have proper construstor");
@@ -23,13 +25,13 @@ internal static class NullCheckedFactory
         
     }
 
-    static T Construct<T, MT>(MT dto) {
-        var ctor = typeof(T).GetConstructor(new Type[] { typeof(MT) });
-        return (T)ctor.Invoke([dto]);
+    static T Construct<T, MT>(MT dto, Data data) {
+        var ctor = typeof(T).GetConstructor(new Type[] { typeof(MT), typeof(Data) });
+        return (T)ctor.Invoke([dto, data]);
     }
 
-    static bool ContainsNulls<T>(T dto) {
-        return typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+    //TODO: check for non nullable fields only
+    static bool ContainsNulls<T>(T dto) =>
+        typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
                    .All(prop => prop.GetValue(dto) != null);
-    }
 }
