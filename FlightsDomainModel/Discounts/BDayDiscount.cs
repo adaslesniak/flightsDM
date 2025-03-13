@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace FlightsDomainModel;
 
-internal class BDayDiscount : IDiscount
+public class BDayDiscount : IDiscount
 {
-    Guid _id = new Guid(nameof(BDayDiscount));
+    int _id = 1;
     int _value = 5;
 
-    Guid IDiscount.Id =>
+    int IDiscount.Id =>
         _id;
 
     int IDiscount.ValueInCents => 

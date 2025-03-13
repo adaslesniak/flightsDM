@@ -5,7 +5,7 @@ public interface IAirlane
     string Id { get; }
     string FullName { get; }
     string ThreeLetterCode { get; }
-    public IEnumerable<Seat> OfferedFlights();
+    public IEnumerable<Flight> OfferedFlights();
     /// <summary>
     /// Before purchase we must check if given seat wasn't purchesed in meantime
     /// </summary>

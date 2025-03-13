@@ -51,7 +51,8 @@ public static class Buy {
         foreach(var seat in available) {
             offers.Add(new() {
                 Passanger = tenant,
-                Seat = seat
+                Seat = seat,
+                AppliedDiscounts = new()
             });
         }
         error = null;
@@ -61,7 +62,7 @@ public static class Buy {
     /// <summary>
     /// Call this after payment system processed purchase
     /// </summary>
-    public static bool FinalizeBuy(this Data data, PurchaseOffer offer, List<Guid> usedDiscounts, out string error) {
+    public static bool FinalizeBuy(this Data data, PurchaseOffer offer, out string error) {
         if(false == offer.Seat.Provider.IsStillAvailable(offer.Seat)) {
             error = "Ticket no more available";
             return false;

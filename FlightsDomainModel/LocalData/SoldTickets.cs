@@ -15,4 +15,7 @@ public class SoldTickets : SetOfModels<Ticket> {
         }
         _models.Add(theTicket!);
     }
+
+    public List<Ticket> All() =>
+        _models;
 }

@@ -1,11 +1,11 @@
 ﻿namespace FlightsDomainModel;
 
-internal class AfricaDiscount : IDiscount
-{
-    Guid _id = new Guid(nameof(AfricaDiscount));
+public class AfricaDiscount : IDiscount {
+
+    int _id = 0;
     int _value = 5;
 
-    Guid IDiscount.Id =>
+    int IDiscount.Id =>
         _id;
 
     int IDiscount.ValueInCents =>

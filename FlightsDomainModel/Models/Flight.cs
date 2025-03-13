@@ -24,6 +24,14 @@ public class Flight {
         From = context.Airports.WithId(dto.SourceAirportId)!;
         Destination = context.Airports.WithId(dto.DestinationAirportId)!;
     }
+
+    //just for tests - maybe we could live without it
+    public Flight(string id, DateTime takeoff, TimeSpan duration, IAirlane airline, Airport from, Airport destination) {
+        _data = new FlightDto { Id = id, TakeOff = takeoff, Duration = duration, AirlineId = airline.Id, SourceAirportId = from.Id, DestinationAirportId = destination.Id };    
+        Airline = airline;
+        From = from;
+        Destination = destination;
+    }
 }
 
 public class FlightDto {

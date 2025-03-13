@@ -11,12 +11,12 @@ public class Ticket {
     public IEnumerable<IDiscount> AppliedDisconuts { get; }
     public int FinalPrice => _data.FinalPrice;
 
-    private Ticket(TicketDto dto, Data context) {
+    public Ticket(TicketDto dto, Data context) {
         _data = dto;
         Owner = context.Passangers.WithId(dto.TenantId)!;
         Details = context.Offer.WithId(dto.SeatId)!;
         var usedDiscounts = new List<IDiscount>();
-        foreach(var discount in dto.AppliedDisconuts) {
+        foreach(var discount in dto.AppliedDisconuts!) {
             usedDiscounts.Add(context.Discounts.WithId(discount)!);
         }
         AppliedDisconuts = usedDiscounts;
@@ -24,9 +24,9 @@ public class Ticket {
 }
 
 //used for serialization, would use whatever dto comes from data repository
-internal class TicketDto {
+public class TicketDto {
     public int SeatId { get; set; }
     public int TenantId { get; set; }
     public int FinalPrice { get; set; }
-    public Guid[]? AppliedDisconuts { get; set; }
+    public int[]? AppliedDisconuts { get; set; }
 }

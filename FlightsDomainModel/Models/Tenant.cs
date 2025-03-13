@@ -11,12 +11,12 @@ public class Tenant {
     public DateTime BirthDay => _data.BirthDay;
     public Kind Category => _data.Category;
 
-    private Tenant(TenantDto dto, Data _) {
+    public Tenant(TenantDto dto, Data _) {
         _data = dto;
     }
 }
 
-internal class TenantDto {
+public class TenantDto {
     public int Id { get; set; }
     public DateTime BirthDay { get; set; }
     public Kind Category { get; set; }

@@ -11,7 +11,8 @@ public class Airport {
     public string Country => _data.Country!;
     public string Continent => _data.Continent!;
 
-    private Airport(AirportDto dto) {
+    //I hate that being public as it's dangerous and should be used through NullCheckFactory, but... it's pain in the ass to write tests without this
+    public Airport(AirportDto dto, Data _) {
         _data = dto;
     }
 

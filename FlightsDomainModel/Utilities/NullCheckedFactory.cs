@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 namespace FlightsDomainModel;
 
-internal static class NullCheckedFactory {
+public static class NullCheckedFactory {
     internal static bool Create<T, MT>(MT dto, Data context, out T? created) {
         created = default;
         if(dto is null) {
@@ -33,5 +33,5 @@ internal static class NullCheckedFactory {
     //TODO: check for non nullable fields only
     static bool ContainsNulls<T>(T dto) =>
         typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                   .All(prop => prop.GetValue(dto) != null);
+                   .Any(prop => prop.GetValue(dto) == null);
 }
