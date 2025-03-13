@@ -58,31 +58,34 @@ internal class TestData {
 
     List<Flight>? _mckFlights;
     List<Flight> MockupFlights => _mckFlights ??= new() {
-        new Flight("MCK 12000 CBA", DateTime.Now, TimeSpan.Zero,
+        new Flight("MCK 12000 CBA", DateTime.Parse("2026-02-01"), TimeSpan.Zero,
             MockupAirlines[0], MarakeshManera(), GdanskAirport()),
-        new Flight("MCK 23000 CBA", DateTime.Now, TimeSpan.Zero,
+        new Flight("MCK 23000 CBA", DateTime.Parse("2019-12-01"), TimeSpan.Zero,
             MockupAirlines[0], GdanskAirport(), SydneyAirport()),
-        new Flight("MCK 31000 CBA", DateTime.Now, TimeSpan.Zero,
+        new Flight("MCK 31000 CBA", DateTime.Parse("2027-02-21"), TimeSpan.Zero,
             MockupAirlines[0], SydneyAirport(), MarakeshManera()),
+        new Flight("MCK 21000 CBA", DateTime.Parse("2026-02-21"), TimeSpan.Zero,
+            MockupAirlines[0], GdanskAirport(), MarakeshManera())
     };
 
     List<Seat>? _seats;
     List<Seat> MockupSeats => _seats ??= new() {
         new Seat(1, MockupFlights[0], 29, 20, MockupDiscounts.ToArray()),
         new Seat(2, MockupFlights[1], 33, 20, MockupDiscounts.ToArray()),
-        new Seat(3, MockupFlights[2], 36, 20, MockupDiscounts.ToArray())
+        new Seat(3, MockupFlights[2], 36, 20, MockupDiscounts.ToArray()),
+        new Seat(4, MockupFlights[3], 21, 20, MockupDiscounts.ToArray())
     };
 
     List<Tenant>? _mckTenants;
     List<Tenant> MockupTenants => _mckTenants ??= new() {
         new Tenant(new TenantDto() {
             Id = 0,
-            BirthDay = DateTime.Now.Date - TimeSpan.FromDays(365.2425 * 25),
+            BirthDay = DateTime.Parse("2019-02-01"),
             Category = Tenant.Kind.A,
         }, new Data()),
         new Tenant(new TenantDto() {
             Id = 1,
-            BirthDay = DateTime.Now,
+            BirthDay = DateTime.Parse("2021-02-21"),
             Category = Tenant.Kind.B,
         }, new Data()),
     };

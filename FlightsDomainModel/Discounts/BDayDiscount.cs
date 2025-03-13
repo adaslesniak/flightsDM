@@ -21,7 +21,7 @@ public class BDayDiscount : IDiscount
         "Applied on user birthday";
 
     //TODO: consult busines - does this apply to day of flight, or day of purchase, should we use local time zone, or purchase time zone or flight start time zone
-    bool IDiscount.CanBeApplied(Tenant tenant, Seat _) =>
-        tenant.BirthDay.DayOfYear == DateTime.Now.DayOfYear;
+    bool IDiscount.CanBeApplied(Tenant tenant, Seat seat) =>
+        tenant.BirthDay.DayOfYear == seat.Flight.TakeOff.DayOfYear;
 
 }
