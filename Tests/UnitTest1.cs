@@ -1,6 +1,9 @@
 using FlightsDomainModel;
+using NUnit.Framework;
 namespace Tests;
 
+
+[TestFixture]
 public class Tests
 {
     Data _data;
@@ -11,40 +14,50 @@ public class Tests
     }
 
     [TestCase("MCK 12000 CBA")]
+    [TestCase("MCK 31000 CBA")]
     public void BuyTicketForFlight(string flightId) {
-        _ = _data.FindBestOffer(0, flightId, out var theOffer, out var error);
-        _ = _data.FinalizeBuy(theOffer!, out error);
+        if(false == _data.FindBestOffer(0, flightId, out var theOffer, out var error)) {
+            Assert.Fail("fix other things for this test to proceed");
+        }
+        if(false == _data.FinalizeBuy(theOffer!, out error)) {
+            Assert.Fail($"failed to purchase the ticket {flightId}: {error}");
+        }
         Assert.That(_data.Purchased.All().Any(tck => tck.Details.Flight.Id == flightId));
     }
 
-    [TestCase("MCK 12345 BCA")]
-    public void DiscountsShouldBeApplied(string flightId) {
-
+    [Test]
+    public void DiscountsShouldBeApplied() {
+        _ = _data.FindBestOffer(0, "MCK 31000 CBA", out var theOffer, out var error);
+        var valueOfDiscounts = theOffer!.Seat.BasePriceInCents - theOffer.Seat.PriceAfterDiscounts();
+        Assert.That(valueOfDiscounts == 10 && theOffer!.AppliedDiscounts.Count == 2);
     }
 
-    [TestCase("MCK 12345 BCA")]
-    public void PriceAfterDiscoutnsShouldBeBelow20Euro(string flightId) {
-
+    [Test]
+    public void PriceAfterDiscoutnsShouldBeBelow20Euro() {
+        Assert.Fail("test missing");
     }
 
-    [TestCase("MCK 12345 BCA")]
-    public void BirthdatDiscountApplies(string flightId) {
-
+    [Test]
+    public void BirthdatDiscountApplies() {
+        Assert.Fail("test missing");
     }
 
     [Test]
     public void AfricaDestinationDiscountApplies() {
-
+        if(false == _data.FindBestOffer(1, "MCK 31000 CBA", out var theOffer, out var error)) {
+            Assert.Fail("fix other things for this test to proceed");
+        }
+        Assert.That(theOffer!.AppliedDiscounts.Any(dsc => dsc.Id == 0));
     }
 
     [Test]
     public void SavesDiscountsForCatATenants() {
-
+        Assert.Fail("test missing");
     }
 
     [Test]
     public void DoesntSaveDiscountsForCatBTenants() {
-
+        Assert.Fail("test missing");
     }
 }
 /*

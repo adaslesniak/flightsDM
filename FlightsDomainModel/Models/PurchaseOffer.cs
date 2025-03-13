@@ -7,4 +7,5 @@ public class PurchaseOffer {
     public Seat Seat { get; init; }
     public Tenant Passanger { get; init; }
     public List<IDiscount> AppliedDiscounts { get; init; }
+    public int PriceAfterDiscout { get; set; }
 }

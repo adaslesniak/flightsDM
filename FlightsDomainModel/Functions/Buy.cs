@@ -26,14 +26,27 @@ public static class Buy {
     }
 
     public static PurchaseOffer PickBestPrice(List<PurchaseOffer> offers, Tenant forTenant) {
-        //availableOffers.Sort((some, other) => ApplyDiscounts(some, tenant) - ApplyDiscounts(other, tenant));
-        return offers.First();
-        //TODO
+        return offers.OrderBy(ofr => ofr.PriceAfterDiscout).First();
     }
 
-    public static int PickDiscounts(PurchaseOffer offer, Tenant forUser, out Guid[] appliedDiscounts) {
-        appliedDiscounts = [];
-        return offer.Seat.MinPriceInCents; //TODO:
+    public static PurchaseOffer PickDiscounts(Seat offer, Tenant forTenant) {
+        var possibleDiscounts = offer.AllowedDiscounts.Where(dsc => dsc.CanBeApplied(forTenant, offer)).ToList();
+        var afterDiscount = offer.BasePriceInCents;
+        var appliedDiscounts = new List<IDiscount>();
+        //TODO: that's not optimized - in some cases lower discount can be applied and better discount won't fit
+        foreach(var discount in possibleDiscounts) {
+            if(afterDiscount - discount.ValueInCents <= offer.MinPriceInCents) {
+                break;
+            }
+            afterDiscount -= discount.ValueInCents;
+            appliedDiscounts.Add(discount);
+        }
+        return new PurchaseOffer() {
+            Passanger = forTenant,
+            Seat = offer,
+            AppliedDiscounts = appliedDiscounts,
+            PriceAfterDiscout = afterDiscount
+        };
     }
 
     public static bool FindOffers(this Data data, Tenant tenant, Flight flight, 
@@ -49,11 +62,7 @@ public static class Buy {
             return false;
         }
         foreach(var seat in available) {
-            offers.Add(new() {
-                Passanger = tenant,
-                Seat = seat,
-                AppliedDiscounts = new()
-            });
+            offers.Add(PickDiscounts(seat, tenant));
         }
         error = null;
         return true;
